@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Cost Web Systems Architecture | Headless CMS & Media Optimization</title>
+    <meta name="description" content="A comprehensive guide to building professional web applications with near-zero cost using headless CMS, BaaS platforms, and optimized media infrastructure in 2025-2026.">
+    <style>
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #141829;
+            --bg-tertiary: #1e2338;
+            --text-primary: #e4e7f1;
+            --text-secondary: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --border-color: #2d3348;
+            --code-bg: #1a1f36;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h1 {
+            font-size: 1.25rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-cyan);
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        #searchInput {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            outline: none;
+            transition: border-color 0.3s;
+            width: 250px;
+        }
+
+        #searchInput:focus {
+            border-color: var(--accent-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #0a0e27 0%, #1e2338 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            animation: fadeIn 0.6s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-cyan);
+            border-left: 4px solid var(--accent-blue);
+            padding-left: 1rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Interactive Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-secondary);
+        }
+
+        thead {
+            background: var(--bg-tertiary);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            border-bottom: 2px solid var(--border-color);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background: var(--bg-primary);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        /* Stack Showcase */
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stack-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .stack-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px var(--shadow);
+        }
+
+        .stack-card h3 {
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+        }
+
+        .stack-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .stack-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .stack-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+        }
+
+        /* Code blocks */
+        code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+            color: var(--accent-cyan);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--bg-tertiary);
+            z-index: 999;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .stack-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #searchInput {
+                width: 100%;
+            }
+        }
+
+        /* Highlight on search */
+        .highlight {
+            background-color: rgba(59, 130, 246, 0.3);
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+
+        /* Back to top button */
+        #backToTop {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        #backToTop.visible {
+            opacity: 1;
+        }
+
+        #backToTop:hover {
+            transform: translateY(-4px);
+            background: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <nav>
+        <h1>⚡ Zero-Cost Web Systems</h1>
+        <ul class="nav-links">
+            <li><a href="#economics">Economics</a></li>
+            <li><a href="#cms">Headless CMS</a></li>
+            <li><a href="#media">Media</a></li>
+            <li><a href="#baas">BaaS</a></li>
+            <li><a href="#hosting">Hosting</a></li>
+            <li><a href="#stacks">Stacks</a></li>
+        </ul>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search content...">
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>The Strategic Architecture of Zero-Cost Web Systems</h1>
+        <p>Headless Content Management and Programmatic Media Optimization in 2025-2026</p>
+    </div>
+
+    <div class="container">
+        <section class="section">
+            <p>The contemporary digital landscape in 2025 and 2026 exhibits a profound structural shift toward decoupled architectures, where the separation of the presentation layer from the data and media layers allows for unprecedented cost optimization. For low-traffic deployments, the proliferation of generous free-tier offerings from Headless Content Management Systems (CMS), Backend-as-a-Service (BaaS) providers, and specialized Image Content Delivery Networks (CDNs) has created a unique opportunity to build and maintain professional-grade web applications for near-zero capital expenditure.</p>
+        </section>
+
+        <section id="economics" class="section">
+            <h2>The Economic Landscape of Decoupled Web Systems</h2>
+            <p>The transition from monolithic architectures to headless and serverless models is primarily driven by the need for greater flexibility and lower infrastructure maintenance. In a headless environment, the content is managed via an administrative interface but delivered as structured data through an Application Programming Interface (API), typically REST or GraphQL.</p>
+            
+            <div class="card">
+                <h3>The Paradox of Egress</h3>
+                <p>Traditional cloud providers often offer enticing free tiers for storage but charge significant fees for data leaving their network. In some cases, the cost of egress is high enough to turn a "free" hosting plan into an expensive bill if a site becomes even moderately popular or experiences a sudden surge in traffic. This makes the <strong>zero-egress model</strong>, pioneered by newer infrastructure providers, a fundamental pillar of modern cost-efficient web design.</p>
+            </div>
+        </section>
+
+        <section id="cms" class="section">
+            <h2>Headless CMS Architectures: Programmatic Content Management</h2>
+            
+            <div class="card">
+                <h3>Strapi: The Open-Source Customization Standard</h3>
+                <p>Strapi remains a primary choice for developers who prioritize control and have the technical capacity to manage their own hosting environment. As an open-source, Node.js-based headless CMS, Strapi allows for complete ownership of the data and codebase. The release of Strapi 5 has introduced significant improvements, including a complete migration to TypeScript and a new Document Service API.</p>
+                <p>The economic advantage of Strapi lies in its self-hosting capability. By deploying Strapi on a free cloud tier—such as Oracle Cloud's "Always Free" virtual machines—developers can bypass the seat limits and entry-level costs of SaaS platforms.</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Strapi Community (Self-Hosted)</th>
+                            <th>Strapi Cloud (Free Tier)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>User Seats</td>
+                            <td>Unlimited</td>
+                            <td>Limited/Project-based</td>
+                        </tr>
+                        <tr>
+                            <td>API Requests</td>
+                            <td>Unlimited</td>
+                            <td>Generous/Capped</td>
+                        </tr>
+                        <tr>
+                            <td>Database</td>
+                            <td>PostgreSQL, MySQL, SQLite, MariaDB</td>
+                            <td>Managed optimized stack</td>
+                        </tr>
+                        <tr>
+                            <td>Asset Storage</td>
+                            <td>Limited by host (e.g., 10GB-100GB)</td>
+                            <td>Included in cloud stack</td>
+                        </tr>
+                        <tr>
+                            <td>Customization</td>
+                            <td>Full control over controllers/services</td>
+                            <td>Standard plugins/Cloud UI</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Sanity: Schema-as-Code and Real-Time Collaboration</h3>
+                <p>Sanity takes a distinct approach by treating content as structured data and defining schemas entirely in code. This "Content Operating System" model is highly attractive for developers who want version control over their content models. Sanity's free tier is notable for its generous quotas, including up to <strong>20 user seats</strong>, which far exceeds the industry average for free SaaS CMS plans.</p>
+                <p>The platform uses a React-based Studio that can be customized with custom components, providing a highly tailored editing experience. Sanity's free plan includes 10GB of bandwidth and 500,000 API requests per month.</p>
+            </div>
+
+            <div class="card">
+                <h3>Directus: The Production-Ready Backend</h3>
+                <p>Directus provides a highly flexible, open-source data platform that can wrap around any existing SQL database. It automatically generates REST and GraphQL APIs based on the database schema, making it an excellent choice for developers who want to maintain direct database access while providing a clean UI for editors.</p>
+                <p>The platform's strength lies in its ability to model data visually while providing instant APIs without vendor lock-in. Directus also features a robust "Flows" system for automation, allowing developers to trigger actions based on content changes without writing custom backend code.</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Sanity Free Plan</th>
+                            <th>Directus (Self-Hosted)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Data Modeling</td>
+                            <td>Schema-as-Code (JS/TS)</td>
+                            <td>Visual Model Builder/Direct SQL</td>
+                        </tr>
+                        <tr>
+                            <td>API Support</td>
+                            <td>GROQ, GraphQL (Delivery only on free)</td>
+                            <td>REST, GraphQL (Full CRUD)</td>
+                        </tr>
+                        <tr>
+                            <td>User Limits</td>
+                            <td>20 users</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Storage Class</td>
+                            <td>Cloud Content Lake</td>
+                            <td>Any SQL DB (Postgres, MySQL, etc.)</td>
+                        </tr>
+                        <tr>
+                            <td>Collaboration</td>
+                            <td>Real-time, Google Docs-like</td>
+                            <td>Built-in permissions/roles</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="media" class="section">
+            <h2>Specialized Media Infrastructure: The Image Management Nexus</h2>
+            <p>For low-traffic websites, media—and specifically images—often represent the largest portion of the data payload and the most complex programmatic requirement. Serving unoptimized images can lead to high bandwidth consumption and poor performance. Specialized image APIs solve this by providing on-the-fly transformations via URL parameters.</p>
+
+            <div class="card">
+                <h3>Cloudinary: The Dynamic Media Transformation Leader</h3>
+                <p>Cloudinary is arguably the most feature-complete option for image hosting, offering a sophisticated media pipeline that includes storage, transformation, and delivery. It operates on a credit-based model where one credit can be used for 1GB of storage, 1GB of bandwidth, or 1,000 transformations. The free tier provides <strong>25 credits per month</strong>.</p>
+                <p>Programmatically, Cloudinary excels through its use of AI for media automation, including automatic format selection (<code>f_auto</code>) and quality optimization (<code>q_auto</code>). These parameters ensure that images are delivered in the most efficient format for the user's browser (e.g., WebP or AVIF).</p>
+            </div>
+
+            <div class="card">
+                <h3>ImageKit: Simplicity and CDN-Based Optimization</h3>
+                <p>ImageKit is frequently cited as a strong competitor to Cloudinary, particularly for teams focusing on performance and simplicity. Its free tier provides <strong>20GB of bandwidth monthly</strong>, which is highly generous for low-traffic sites. ImageKit integrates seamlessly with existing cloud storage providers like AWS S3 or Google Cloud Storage.</p>
+                <p>The programmatic interface of ImageKit is centered on URL-based transformations, which allow for real-time resizing, cropping, and the generation of lazy-loading placeholders.</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Cloudinary Free Tier</th>
+                            <th>ImageKit Free Tier</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Metric Model</td>
+                            <td>Credits (25/month)</td>
+                            <td>Bandwidth (20GB/month)</td>
+                        </tr>
+                        <tr>
+                            <td>Max File Size</td>
+                            <td>10MB (Images) / 100MB (Video)</td>
+                            <td>25MB (for optimization)</td>
+                        </tr>
+                        <tr>
+                            <td>Transformation Limit</td>
+                            <td>25,000 (if credits used solely for this)</td>
+                            <td>Unlimited (capped by bandwidth)</td>
+                        </tr>
+                        <tr>
+                            <td>AI Features</td>
+                            <td>Smart cropping, background removal</td>
+                            <td>Basic AI; focus on performance</td>
+                        </tr>
+                        <tr>
+                            <td>Video Support</td>
+                            <td>Full transcoding/streaming pipeline</td>
+                            <td>Basic delivery and resizing</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Cloudflare R2 and Images: The Zero-Egress Revolution</h3>
+                <p>Cloudflare has fundamentally disrupted the media hosting market with R2, an S3-compatible object storage service that charges <strong>zero egress fees</strong>. This model is particularly attractive for low-traffic sites where unexpected spikes could otherwise lead to high bandwidth bills.</p>
+                <p>The R2 free tier includes 10GB of storage per month, 1 million Class A (write) operations, and 10 million Class B (read) operations. Cloudflare also offers an "Images" product that integrates tightly with its global CDN, allowing up to 5,000 unique transformations per month at no cost.</p>
+            </div>
+        </section>
+
+        <section id="baas" class="section">
+            <h2>Backend-as-a-Service (BaaS) as an Integrated Content Solution</h2>
+            
+            <div class="card">
+                <h3>Supabase vs. Firebase: The Strategic Choice</h3>
+                <p>Supabase has gained significant traction as an open-source alternative to Firebase, offering a suite of tools built on top of PostgreSQL. The Supabase free tier includes 500MB of database storage, 5GB of bandwidth, and 50MB of file storage. While the storage cap is lower than Firebase's 1GB, Supabase offers more generous limits for authentication (50,000 monthly active users) and unlimited API requests.</p>
+                <p>Firebase, backed by the Google ecosystem, provides a more established platform with strong integration with other Google services. However, Firebase is closed-source and its pricing can scale rapidly and unpredictably as traffic grows. For developers prioritizing data portability and SQL's powerful querying capabilities, Supabase is often considered the more modern and flexible choice.</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Supabase Free Tier</th>
+                            <th>Firebase Spark Plan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Database Storage</td>
+                            <td>500MB (Postgres)</td>
+                            <td>1GB (Firestore)</td>
+                        </tr>
+                        <tr>
+                            <td>File Storage</td>
+                            <td>50MB</td>
+                            <td>1GB</td>
+                        </tr>
+                        <tr>
+                            <td>Bandwidth/Egress</td>
+                            <td>2GB - 5GB/month</td>
+                            <td>10GB/month</td>
+                        </tr>
+                        <tr>
+                            <td>Authentication</td>
+                            <td>50,000 MAU</td>
+                            <td>Unlimited (threshold-based)</td>
+                        </tr>
+                        <tr>
+                            <td>Operations</td>
+                            <td>Unlimited API Requests</td>
+                            <td>50k Reads / 20k Writes per day</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Appwrite and PocketBase: The All-in-One Alternatives</h3>
+                <p>Appwrite provides a balanced, all-in-one option that can be either cloud-hosted or self-hosted. It supports multiple languages and runtimes for functions and includes built-in hosting, allowing developers to manage an entire application from a single platform. Its free tier includes 1GB of storage and 2GB of bandwidth.</p>
+                <p>PocketBase is a unique entrant in the space, combining a real-time database, authentication, and file storage into a single Go binary. Its simplicity makes it ideal for rapid prototyping and low-traffic sites that need to be deployed with minimal infrastructure overhead.</p>
+            </div>
+        </section>
+
+        <section id="hosting" class="section">
+            <h2>Infrastructure and Hosting: Free Tiers for Deployment</h2>
+            
+            <div class="card">
+                <h3>Oracle Cloud: The High-Performance Free Tier</h3>
+                <p>Oracle Cloud Infrastructure (OCI) offers one of the most substantial free tiers in the industry, often referred to as the "Always Free" plan. It includes up to <strong>4 ARM Ampere A1 Compute instances with 24GB of RAM shared across them</strong>, which is more than enough to run multiple Strapi or PocketBase instances. Furthermore, OCI provides 10TB of free egress per month, effectively eliminating bandwidth costs for almost any low-traffic application.</p>
+            </div>
+
+            <div class="card">
+                <h3>Fly.io and Railway: Developer-Centric Hosting</h3>
+                <p>Fly.io and Railway have become popular choices for deploying containerized applications due to their exceptional tooling and developer experience. Fly.io operates on a pay-as-you-go model with a soft free tier where usage below approximately $5 per month is often waived. Railway provides a $5 credit for trial purposes and offers a serverless feature that automatically puts idle services to sleep after 10 minutes.</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Provider</th>
+                            <th>Free Compute Resources</th>
+                            <th>Bandwidth/Egress Limit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Oracle Cloud</td>
+                            <td>4 ARM vCPUs / 24GB RAM</td>
+                            <td>10TB Egress</td>
+                        </tr>
+                        <tr>
+                            <td>Fly.io</td>
+                            <td>Small VMs (256MB RAM)</td>
+                            <td>~50GB Egress</td>
+                        </tr>
+                        <tr>
+                            <td>Vercel</td>
+                            <td>Serverless Functions</td>
+                            <td>100GB Bandwidth</td>
+                        </tr>
+                        <tr>
+                            <td>Cloudflare Pages</td>
+                            <td>Static Hosting</td>
+                            <td>Unlimited Bandwidth</td>
+                        </tr>
+                        <tr>
+                            <td>PocketHost.io</td>
+                            <td>Managed PocketBase</td>
+                            <td>Unmetered (Fair Use)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>Programmatic Management and Rate Limit Strategies</h3>
+                <p>Managing these services programmatically requires a disciplined approach to API interactions to avoid hitting rate limits or incurring unnecessary costs. Most free-tier services implement rate limits to protect their infrastructure and ensure fair resource allocation.</p>
+                <p>Rate limits typically cap the number of requests in a given timeframe, such as 100 requests per minute or 1,250 requests per hour. To mitigate these constraints, developers should implement exponential backoff strategies—retrying failed requests with increasing delays—and space out requests to reduce server load.</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>API Provider</th>
+                            <th>Free Request Quota</th>
+                            <th>Primary Limitation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Imgur API</td>
+                            <td>1,250 POSTs/hour</td>
+                            <td>Credits per action (e.g., 10 per upload)</td>
+                        </tr>
+                        <tr>
+                            <td>Gemini Image API</td>
+                            <td>500 images/day</td>
+                            <td>Low RPM (2–15)</td>
+                        </tr>
+                        <tr>
+                            <td>PocketHost API</td>
+                            <td>1,000 requests/hour</td>
+                            <td>Shared IP risk for SSR proxies</td>
+                        </tr>
+                        <tr>
+                            <td>Cloudflare Workers</td>
+                            <td>100,000 requests/day</td>
+                            <td>Resource usage (CPU time)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="stacks" class="section">
+            <h2>Strategic Synthesis: Architectural Stacks for Near-Zero Cost</h2>
+            <p>Combining these researched components leads to several optimized architectural stacks tailored to low-traffic, zero-cost digital properties.</p>
+
+            <div class="stack-grid">
+                <div class="stack-card">
+                    <h3>🛡️ The "Sovereign" Open-Source Stack</h3>
+                    <p>Ideal for developers who want full control over their infrastructure and data without being tied to a single SaaS provider.</p>
+                    <ul class="stack-list">
+                        <li><strong>Infrastructure:</strong> Oracle Cloud "Always Free" ARM Instance</li>
+                        <li><strong>CMS:</strong> Strapi Community Edition (Self-hosted)</li>
+                        <li><strong>Database:</strong> PostgreSQL (Running on the OCI instance)</li>
+                        <li><strong>Media Storage:</strong> Cloudflare R2 (10GB free, zero egress)</li>
+                        <li><strong>Media Optimization:</strong> Custom Cloudflare Workers for resizing</li>
+                        <li><strong>Frontend:</strong> Cloudflare Pages</li>
+                    </ul>
+                </div>
+
+                <div class="stack-card">
+                    <h3>⚡ The "Rapid Development" Managed Stack</h3>
+                    <p>For developers who prioritize speed of iteration and want to leverage managed services to avoid the overhead of server maintenance.</p>
+                    <ul class="stack-list">
+                        <li><strong>CMS:</strong> Sanity (Free tier with 20 users)</li>
+                        <li><strong>Media Management:</strong> Cloudinary (25 monthly credits)</li>
+                        <li><strong>Backend/BaaS:</strong> Supabase (50k MAU, 500MB DB)</li>
+                        <li><strong>Frontend Hosting:</strong> Vercel Hobby Plan</li>
+                        <li><strong>Automation:</strong> Directus AI Assistant for content generation</li>
+                    </ul>
+                </div>
+
+                <div class="stack-card">
+                    <h3>🚀 The "Indie Hacker" PocketBase Stack</h3>
+                    <p>A lightweight stack designed for small apps and prototypes that need real-time capabilities and simple deployment.</p>
+                    <ul class="stack-list">
+                        <li><strong>Backend:</strong> PocketHost.io (Managed PocketBase)</li>
+                        <li><strong>Media:</strong> Integrated PocketBase S3 support or direct Cloudflare R2 connection</li>
+                        <li><strong>Programmatic Imagery:</strong> Gemini Image API for dynamic assets</li>
+                        <li><strong>Frontend:</strong> Netlify (Free tier with 100GB bandwidth)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Conclusions and Practical Recommendations</h2>
+            <div class="card">
+                <p>Building and managing high-quality websites for near-zero cost in 2025 and 2026 is no longer a matter of using subpar tools, but rather one of strategic orchestration. The key to maintaining these sites programmatically is a disciplined approach to API limits and a focus on zero-egress infrastructure.</p>
+                
+                <h3>Key Takeaways:</h3>
+                <ul class="stack-list">
+                    <li>Prioritize <strong>Cloudflare R2</strong> for all static media storage to eliminate the risk of bandwidth-related costs</li>
+                    <li>Choose between Sanity's generous user seats and Strapi's complete self-hosted freedom based on collaboration vs. control needs</li>
+                    <li>Implement <strong>exponential backoff</strong> and client-side request throttling to stay within free-tier rate limits</li>
+                    <li>Integrate free AI generation APIs like Gemini for programmatic media needs without designer costs</li>
+                    <li>Carefully select and combine services to maintain sophisticated, high-performance web properties for "next to nothing"</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <button id="backToTop">↑</button>
+
+    <script>
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+
+            // Show/hide back to top button
+            const backToTop = document.getElementById('backToTop');
+            if (winScroll > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Back to top functionality
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchTerm = e.target.value.toLowerCase();
+                
+                // Remove previous highlights
+                document.querySelectorAll('.highlight').forEach(el => {
+                    const parent = el.parentNode;
+                    parent.replaceChild(document.createTextNode(el.textContent), el);
+                    parent.normalize();
+                });
+
+                if (searchTerm.length < 3) return;
+
+                // Highlight matching text
+                const container = document.querySelector('.container');
+                const walker = document.createTreeWalker(
+                    container,
+                    NodeFilter.SHOW_TEXT,
+                    null,
+                    false
+                );
+
+                const nodesToReplace = [];
+                while (walker.nextNode()) {
+                    const node = walker.currentNode;
+                    if (node.nodeValue.toLowerCase().includes(searchTerm)) {
+                        nodesToReplace.push(node);
+                    }
+                }
+
+                nodesToReplace.forEach(node => {
+                    const parent = node.parentNode;
+                    if (parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE') return;
+
+                    const text = node.nodeValue;
+                    const regex = new RegExp(`(${searchTerm})`, 'gi');
+                    const parts = text.split(regex);
+                    
+                    const fragment = document.createDocumentFragment();
+                    parts.forEach(part => {
+                        if (part.toLowerCase() === searchTerm.toLowerCase()) {
+                            const mark = document.createElement('span');
+                            mark.className = 'highlight';
+                            mark.textContent = part;
+                            fragment.appendChild(mark);
+                        } else {
+                            fragment.appendChild(document.createTextNode(part));
+                        }
+                    });
+                    
+                    parent.replaceChild(fragment, node);
+                });
+
+                // Scroll to first match
+                const firstHighlight = document.querySelector('.highlight');
+                if (firstHighlight) {
+                    firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 300);
+        });
+
+        // Animate sections on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.6s forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Table sorting functionality
+        document.querySelectorAll('th').forEach((header, index) => {
+            header.addEventListener('click', () => {
+                const table = header.closest('table');
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                
+                const isAscending = header.classList.contains('sort-asc');
+                
+                // Remove sort classes from all headers
+                table.querySelectorAll('th').forEach(th => {
+                    th.classList.remove('sort-asc', 'sort-desc');
+                });
+                
+                // Sort rows
+                rows.sort((a, b) => {
+                    const aValue = a.cells[index].textContent.trim();
+                    const bValue = b.cells[index].textContent.trim();
+                    
+                    if (!isNaN(aValue) && !isNaN(bValue)) {
+                        return isAscending ? bValue - aValue : aValue - bValue;
+                    }
+                    
+                    return isAscending ? 
+                        bValue.localeCompare(aValue) : 
+                        aValue.localeCompare(bValue);
+                });
+                
+                // Add sort class
+                header.classList.add(isAscending ? 'sort-desc' : 'sort-asc');
+                
+                // Rebuild table
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    </script>
+</body>
+</html>
